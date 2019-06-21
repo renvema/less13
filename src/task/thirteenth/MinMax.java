@@ -1,5 +1,4 @@
 package task.thirteenth;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.BiConsumer;
