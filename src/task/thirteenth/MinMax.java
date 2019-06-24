@@ -1,8 +1,8 @@
 package task.thirteenth;
+
 import java.util.Comparator;
-import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class MinMax {
@@ -10,14 +10,37 @@ public class MinMax {
             Stream<? extends T> stream,
             Comparator<? super T> order,
             BiConsumer<? super T, ? super T> minMaxConsumer) {
+        class MinMax implements Consumer<T> {
 
-        List<T> list = stream
-                .sorted(order)
-                .collect(Collectors.toList());
-        if (list.isEmpty()) {
-            minMaxConsumer.accept(null, null);
-        } else {
-            minMaxConsumer.accept(list.get(0), list.get(list.size() - 1));
+            private T min;
+            private T max;
+
+            public MinMax() {
+                min = null;
+                max = null;
+            }
+
+            public T getMax() {
+                return max;
+            }
+
+
+            public T getMin() {
+                return min;
+            }
+
+            @Override
+            public void accept(T t) {
+                if (min == null) {
+                    min = t;
+                }
+                max = t;
+            }
+
+
         }
+        MinMax minMax = new MinMax();
+        stream.sorted(order).forEach(minMax);
+        minMaxConsumer.accept(minMax.getMin(), minMax.getMax());
     }
 }
